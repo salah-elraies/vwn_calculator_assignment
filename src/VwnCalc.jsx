@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import cardImg from "./blueCard.png";
+const inputNames = ["vendorVal", "mediaVal", "corpVal", "teamVal"];
 const initialState = {
   vendorVal: 0,
   mediaVal: 0,
@@ -19,18 +20,12 @@ const companies = ["brex", "stripe", "amex"];
 function VwnCalc() {
   const [sum, setSum] = useState(0);
   const [state, setState] = useState(initialState);
+
+  // change
   const handleChange = (e) => {
-    setState({ ...state, [e.target.name]: parseFloat(e.target.value) });
-    if (
-      state.vendorVal > 0 &&
-      state.mediaVal > 0 &&
-      state.corpVal > 0 &&
-      state.teamVal > 0
-    ) {
-      setSum(state.vendorVal + state.mediaVal + state.corpVal + state.teamVal);
-    } else {
-      setSum(0);
-    }
+    const inputVal = parseFloat(e.target.value);
+    setState({ ...state, [e.target.name]: inputVal });
+
     if (!e.target.value) {
       setSum(0);
     }
@@ -75,6 +70,17 @@ function VwnCalc() {
           : state.selected_index - 1,
     });
   };
+  useEffect(() => {
+    if (!inputNames.find((input) => state[input] === 0 || !state[input])) {
+      // when this was up with the handleChange function
+      // if (e.target.name === "vendorVal") {
+      //   setSum(inputVal + state.mediaVal + state.corpVal + state.teamVal);
+      // }
+      setSum(state.vendorVal + state.mediaVal + state.corpVal + state.teamVal);
+    } else {
+      setSum(0);
+    }
+  }, [state.vendorVal, state.mediaVal, state.corpVal, state.teamVal]);
   useEffect(() => {
     setState({
       ...state,
